@@ -5,6 +5,14 @@
 #define PI 3.14159265
 #define M_HEIGHT 0.01
 #define DECREASE_RATE 0.9982
+#define FVF_VERTEX    D3DFVF_XYZ|D3DFVF_NORMAL|D3DFVF_TEX1
+struct _VERTEX
+{
+	D3DXVECTOR3 pos; // vertex position
+	D3DXVECTOR3 norm; // vertex normal
+	float tu; // texture coordinates
+	float tv;
+};
 
 CSphere::CSphere(void)
 {
@@ -15,22 +23,48 @@ CSphere::CSphere(void)
 	m_velocity_z = 0;
 	m_pSphereMesh = NULL;
 }
+
+CSphere::CSphere(const char* ballImageFileName)
+{
+	ZeroMemory(&m_mtrl, sizeof(m_mtrl)); // memset을 통해 모두 0으로 초기화
+	this->m_radius = M_RADIUS;
+	this->m_velocity_x = 0;
+	this->m_velocity_z = 0;
+	this->m_pSphereMesh = nullptr;
+	D3DXMatrixIdentity(&m_mLocal);
+
+	this->ballImageFileName = ballImageFileName;
+}
+
 CSphere::~CSphere(void) {}
 
 
-bool CSphere::create(IDirect3DDevice9* pDevice, D3DXCOLOR color = d3d::WHITE)
+bool CSphere::create(IDirect3DDevice9* pDevice)
 {
 	if (NULL == pDevice)
 		return false;
 
-	m_mtrl.Ambient = color;
-	m_mtrl.Diffuse = color;
-	m_mtrl.Specular = color;
+	m_mtrl.Diffuse = d3d::WHITE;
+	m_mtrl.Ambient = d3d::WHITE;
+	m_mtrl.Specular = d3d::WHITE;
 	m_mtrl.Emissive = d3d::BLACK;
-	m_mtrl.Power = 5.0f;
+	m_mtrl.Power = 100.0f;
 
-	if (FAILED(D3DXCreateSphere(pDevice, getRadius(), 50, 50, &m_pSphereMesh, NULL)))
+	pDevice->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);
+	pDevice->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);
+	pDevice->SetSamplerState(0, D3DSAMP_MIPFILTER, D3DTEXF_LINEAR);
+
+	this->m_pSphereMesh = _createMappedSphere(pDevice);
+
+	string filePath = "./image/" + this->ballImageFileName + ".bmp";
+
+	if (FAILED(D3DXCreateTextureFromFile(pDevice, filePath.c_str(), &Tex)))
+	{
 		return false;
+	}
+
+	/*if (FAILED(D3DXCreateSphere(pDevice, getRadius(), 50, 50, &m_pSphereMesh, NULL)))
+		return false;*/
 	return true;
 }
 
@@ -46,8 +80,10 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 {
 	if (NULL == pDevice)
 		return;
+
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &m_mLocal);
+	pDevice->SetTexture(0, Tex);
 	pDevice->SetMaterial(&m_mtrl);
 	m_pSphereMesh->DrawSubset(0);
 }
@@ -196,4 +232,48 @@ double CSphere::getPreCenter_x() const
 double CSphere::getPreCenter_z() const
 {
 	return this->pre_center_z;
+}
+
+LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev)
+{
+	// create the sphere
+	LPD3DXMESH mesh;
+	if (FAILED(D3DXCreateSphere(pDev, this->getRadius(), 50, 50, &mesh, NULL)))
+		return nullptr;
+
+	// create a copy of the mesh with texture coordinates,
+	// since the D3DX function doesn't include them
+	LPD3DXMESH texMesh;
+	if (FAILED(mesh->CloneMeshFVF(D3DXMESH_SYSTEMMEM, FVF_VERTEX, pDev, &texMesh)))
+		// failed, return un-textured mesh
+		return mesh;
+
+	// finished with the original mesh, release it
+	mesh->Release();
+
+	// lock the vertex buffer
+	//LPVERTEX pVerts;
+	struct _VERTEX* pVerts;
+	if (SUCCEEDED(texMesh->LockVertexBuffer(0, reinterpret_cast<void**>(&pVerts))))
+	{
+		// get vertex count
+		int numVerts = texMesh->GetNumVertices();
+
+		// loop through the vertices
+		for (int i = 0; i < numVerts; i++)
+		{
+			// calculate texture coordinates
+			pVerts->tu = asinf(pVerts->norm.x) / D3DX_PI + 0.5f;
+			pVerts->tv = asinf(pVerts->norm.y) / D3DX_PI + 0.5f;
+
+			// go to next vertex
+			pVerts++;
+		}
+
+		// unlock the vertex buffer
+		texMesh->UnlockVertexBuffer();
+	}
+
+	// return pointer to caller
+	return texMesh;
 }

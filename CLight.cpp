@@ -10,6 +10,8 @@ CLight::CLight(void)
     m_pMesh = NULL;
     m_bound._center = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
     m_bound._radius = 0.0f;
+
+
 }
 CLight::~CLight(void) {}
 

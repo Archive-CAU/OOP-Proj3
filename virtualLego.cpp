@@ -72,13 +72,7 @@ const float spherePos[16][2] = {
 	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 3), (COMMON_RADIUS + 0.01f)} 
 };
 
-// initialize the color of each ball (ball0 ~ ball3)
-const D3DXCOLOR sphereColor[16] = { 
-	d3d::RED, d3d::RED, d3d::YELLOW, d3d::WHITE,
-	d3d::RED, d3d::RED, d3d::YELLOW, d3d::WHITE,
-	d3d::RED, d3d::RED, d3d::YELLOW, d3d::WHITE,
-	d3d::RED, d3d::RED, d3d::YELLOW, d3d::WHITE 
-};
+
 
 // -----------------------------------------------------------------------------
 // Transform matrices
@@ -97,9 +91,7 @@ D3DXMATRIX g_mProj;
 // Global variables
 // -----------------------------------------------------------------------------
 CFloor	g_legoPlane;
-//CWall	g_legowall[4];
-//CSphere	g_sphere[4];
-CSphere	g_target_blueball;
+CSphere	g_target_blueball("blue");
 CLight	g_light;
 
 array<CWall*, 4> g_legowall = {
@@ -110,10 +102,10 @@ array<CWall*, 4> g_legowall = {
 };
 
 array<CSphere*, 16> g_sphere = {
-	new CSphere(), new CSphere(), new CSphere(), new CSphere(),
-	new CSphere(), new CSphere(), new CSphere(), new CSphere(),
-	new CSphere(), new CSphere(), new CSphere(), new CSphere(),
-	new CSphere(), new CSphere(), new CSphere(), new CSphere()
+	new CSphere("0"), new CSphere("1"), new CSphere("2"), new CSphere("3"),
+	new CSphere("4"), new CSphere("5"), new CSphere("6"), new CSphere("7"),
+	new CSphere("8"), new CSphere("9"), new CSphere("10"), new CSphere("11"),
+	new CSphere("12"), new CSphere("13"), new CSphere("14"), new CSphere("15")
 };
 
 double g_camera_pos[3] = { 0.0, 5.0, -8.0 };
@@ -152,13 +144,13 @@ bool Setup()
 
 	// create four balls and set the position
 	for (i = 0; i < 16; i++) {
-		if (false == g_sphere[i]->create(Device, sphereColor[i])) return false;
+		if (false == g_sphere[i]->create(Device)) return false;
 		g_sphere[i]->setCenter(spherePos[i][0], (float)M_RADIUS, spherePos[i][1]);
 		g_sphere[i]->setPower(0, 0);
 	}
 
 	// create blue ball for set direction
-	if (false == g_target_blueball.create(Device, d3d::BLUE)) return false;
+	if (false == g_target_blueball.create(Device)) return false;
 	g_target_blueball.setCenter(.0f, (float)M_RADIUS, .0f);
 
 	// light setting 
@@ -166,8 +158,8 @@ bool Setup()
 	::ZeroMemory(&lit, sizeof(lit));
 	lit.Type = D3DLIGHT_POINT;
 	lit.Diffuse = d3d::WHITE;
-	lit.Specular = d3d::WHITE * 0.9f;
-	lit.Ambient = d3d::WHITE * 0.9f;
+	lit.Specular = d3d::WHITE * 1.0f;
+	lit.Ambient = d3d::WHITE * 1.0f;
 	lit.Position = D3DXVECTOR3(0.0f, 3.0f, 0.0f);
 	lit.Range = 100.0f;
 	lit.Attenuation0 = 0.0f;
@@ -248,7 +240,7 @@ bool Display(float timeDelta)
 			g_sphere[i]->draw(Device, g_mWorld);
 		}
 		g_target_blueball.draw(Device, g_mWorld);
-		g_light.draw(Device);
+		//g_light.draw(Device);
 
 		Device->EndScene();
 		Device->Present(0, 0, 0, 0);
