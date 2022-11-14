@@ -32,7 +32,7 @@ CSphere::CSphere(const char* ballImageFileName)
 	this->m_velocity_z = 0;
 	this->m_pSphereMesh = nullptr;
 	D3DXMatrixIdentity(&m_mLocal);
-
+	D3DXMatrixIdentity(&this->ballRoll);
 	this->ballImageFileName = ballImageFileName;
 }
 
@@ -83,9 +83,11 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
 
 	pDevice->SetTransform(D3DTS_WORLD, &mWorld);
 	pDevice->MultiplyTransform(D3DTS_WORLD, &m_mLocal);
+	pDevice->MultiplyTransform(D3DTS_WORLD, &ballRoll);
 	pDevice->SetTexture(0, Tex);
 	pDevice->SetMaterial(&m_mtrl);
 	m_pSphereMesh->DrawSubset(0);
+
 }
 
 bool CSphere::hasIntersected(CSphere& ball)
@@ -161,7 +163,7 @@ void CSphere::ballUpdate(float timeDiff)
 
 		float force = sqrt(pow(this->m_velocity_x, 2) + pow(this->m_velocity_z, 2));
 		D3DXMatrixRotationAxis(&tmp, &c, force * SPIN_RATIO);
-		//matBallRoll *= tmp;
+		ballRoll *= tmp;
 	}
 	else { this->setPower(0, 0); }
 	//this->setPower(this->getVelocity_X() * DECREASE_RATE, this->getVelocity_Z() * DECREASE_RATE);

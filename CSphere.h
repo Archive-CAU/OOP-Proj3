@@ -14,6 +14,7 @@ private:
 	float m_velocity_z;
 
 	string ballImageFileName = string();
+	D3DXMATRIX ballRoll;
 
 	float pre_center_x, pre_center_z;
 
