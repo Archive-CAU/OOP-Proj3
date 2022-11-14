@@ -2,7 +2,7 @@
 #define _CLIGHT_
 
 #include "d3dUtility.h"
-//#include "CObject.h"
+
 
 class CLight 
 {

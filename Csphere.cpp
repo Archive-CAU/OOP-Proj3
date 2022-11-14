@@ -1,7 +1,7 @@
 #include "CSphere.h"
 
 
-#define M_RADIUS 0.21   // ball radius
+#define M_RADIUS 0.14   // ball radius
 #define PI 3.14159265
 #define M_HEIGHT 0.01
 #define DECREASE_RATE 0.9982
@@ -118,18 +118,6 @@ void CSphere::ballUpdate(float timeDiff)
 		float tX = cord.x + TIME_SCALE * timeDiff * m_velocity_x;
 		float tZ = cord.z + TIME_SCALE * timeDiff * m_velocity_z;
 
-		//correction of position of ball
-		// Please uncomment this part because this correction of ball position is necessary when a ball collides with a wall
-		/*if(tX >= (4.5 - M_RADIUS))
-			tX = 4.5 - M_RADIUS;
-		else if(tX <=(-4.5 + M_RADIUS))
-			tX = -4.5 + M_RADIUS;
-		else if(tZ <= (-3 + M_RADIUS))
-			tZ = -3 + M_RADIUS;
-		else if(tZ >= (3 - M_RADIUS))
-			tZ = 3 - M_RADIUS;*/
-
-		//this->setCenter(tX, cord.y, tZ);
 		this->setPosition(tX, cord.y, tZ);
 
 		D3DXMATRIX tmp;

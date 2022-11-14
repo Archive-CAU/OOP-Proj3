@@ -18,7 +18,6 @@
 #include <cassert>
 #include <array>
 
-//#include "CObject.h"
 #include "CSphere.h"
 #include "CWall.h"
 #include "CLight.h"
@@ -36,12 +35,50 @@ IDirect3DDevice9* Device = NULL;
 // window size
 const int Width = 1024;
 const int Height = 768;
+const float BALL_SET_RATIO = 1.82f;
+const float COMMON_RADIUS = 0.14f;
 
 // There are four balls
 // initialize the position (coordinate) of each ball (ball0 ~ ball3)
-const float spherePos[4][2] = { {-2.7f,0} , {+2.4f,0} , {3.3f,0} , {-2.7f,-0.9f} };
+//const float spherePos[4][2] = { {-2.7f,0} , {+2.4f,0} , {3.3f,0} , {-2.7f,-0.9f} };
+const float spherePos[16][2] = {
+
+	//white ball
+	{-2.7f, 0},
+
+	//color ball
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 3), (COMMON_RADIUS * 3 + 0.03f)},
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), (COMMON_RADIUS * 2 + 0.02f)},
+
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO)), -(COMMON_RADIUS + 0.01f)},
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), -(COMMON_RADIUS * 4 + 0.04f)},
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 2), -(COMMON_RADIUS * 2 + 0.02f)},
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 2), (COMMON_RADIUS * 2 + 0.02f)},
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 3), -(COMMON_RADIUS + 0.01f)},
+
+	//black ball
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 2), 0},
+
+	//striple ball
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 3), -(COMMON_RADIUS * 3 + 0.03f)},
+
+	{+1.5f, 0},
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), -(COMMON_RADIUS * 2 + 0.02f)},
+
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO)), COMMON_RADIUS + 0.01f},
+
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), 0},
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), (COMMON_RADIUS * 4 + 0.04f)},
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 3), (COMMON_RADIUS + 0.01f)} 
+};
+
 // initialize the color of each ball (ball0 ~ ball3)
-const D3DXCOLOR sphereColor[4] = { d3d::RED, d3d::RED, d3d::YELLOW, d3d::WHITE };
+const D3DXCOLOR sphereColor[16] = { 
+	d3d::RED, d3d::RED, d3d::YELLOW, d3d::WHITE,
+	d3d::RED, d3d::RED, d3d::YELLOW, d3d::WHITE,
+	d3d::RED, d3d::RED, d3d::YELLOW, d3d::WHITE,
+	d3d::RED, d3d::RED, d3d::YELLOW, d3d::WHITE 
+};
 
 // -----------------------------------------------------------------------------
 // Transform matrices
@@ -61,7 +98,7 @@ D3DXMATRIX g_mProj;
 // -----------------------------------------------------------------------------
 CFloor	g_legoPlane;
 //CWall	g_legowall[4];
-CSphere	g_sphere[4];
+//CSphere	g_sphere[4];
 CSphere	g_target_blueball;
 CLight	g_light;
 
@@ -70,6 +107,13 @@ array<CWall*, 4> g_legowall = {
 	new CBottomWall(0.0f, 0.12f, -3.06f, d3d::DARKRED),
 	new CRightWall(4.56f, 0.12f, 0.0f, d3d::DARKRED),
 	new CLeftWall(-4.56f, 0.12f, 0.0f, d3d::DARKRED),
+};
+
+array<CSphere*, 16> g_sphere = {
+	new CSphere(), new CSphere(), new CSphere(), new CSphere(),
+	new CSphere(), new CSphere(), new CSphere(), new CSphere(),
+	new CSphere(), new CSphere(), new CSphere(), new CSphere(),
+	new CSphere(), new CSphere(), new CSphere(), new CSphere()
 };
 
 double g_camera_pos[3] = { 0.0, 5.0, -8.0 };
@@ -107,10 +151,10 @@ bool Setup()
 	g_legowall[3]->setPosition(-4.56f, 0.12f, 0.0f);
 
 	// create four balls and set the position
-	for (i = 0; i < 4; i++) {
-		if (false == g_sphere[i].create(Device, sphereColor[i])) return false;
-		g_sphere[i].setCenter(spherePos[i][0], (float)M_RADIUS, spherePos[i][1]);
-		g_sphere[i].setPower(0, 0);
+	for (i = 0; i < 16; i++) {
+		if (false == g_sphere[i]->create(Device, sphereColor[i])) return false;
+		g_sphere[i]->setCenter(spherePos[i][0], (float)M_RADIUS, spherePos[i][1]);
+		g_sphere[i]->setPower(0, 0);
 	}
 
 	// create blue ball for set direction
@@ -180,18 +224,18 @@ bool Display(float timeDelta)
 		Device->BeginScene();
 
 		// update the position of each ball. during update, check whether each ball hit by walls.
-		for (i = 0; i < 4; i++) {
-			g_sphere[i].ballUpdate(timeDelta);
+		for (i = 0; i < 16; i++) {
+			g_sphere[i]->ballUpdate(timeDelta);
 			for (j = 0; j < 4; j++) { 
-				g_legowall[i]->hitBy(g_sphere[j]); 
+				g_legowall[j]->hitBy(*g_sphere[i]); 
 			}
 		}
 
 		// check whether any two balls hit together and update the direction of balls
-		for (i = 0; i < 4; i++) {
-			for (j = 0; j < 4; j++) {
+		for (i = 0; i < 16; i++) {
+			for (j = 0; j < 16; j++) {
 				if (i >= j) { continue; }
-				g_sphere[i].hitBy(g_sphere[j]);
+				g_sphere[i]->hitBy(*g_sphere[j]);
 			}
 		}
 
@@ -199,7 +243,9 @@ bool Display(float timeDelta)
 		g_legoPlane.draw(Device, g_mWorld);
 		for (i = 0; i < 4; i++) {
 			g_legowall[i]->draw(Device, g_mWorld);
-			g_sphere[i].draw(Device, g_mWorld);
+		}
+		for (i = 0; i < 16; i++) {
+			g_sphere[i]->draw(Device, g_mWorld);
 		}
 		g_target_blueball.draw(Device, g_mWorld);
 		g_light.draw(Device);
@@ -241,14 +287,20 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		case VK_SPACE:
 
 			D3DXVECTOR3 targetpos = g_target_blueball.getPosition();
-			D3DXVECTOR3	whitepos = g_sphere[3].getPosition();
+			D3DXVECTOR3	whitepos = g_sphere[0]->getPosition();
 			double theta = acos(sqrt(pow(targetpos.x - whitepos.x, 2)) / sqrt(pow(targetpos.x - whitepos.x, 2) +
 				pow(targetpos.z - whitepos.z, 2)));		// 기본 1 사분면
-			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x >= 0) { theta = -theta; }	//4 사분면
-			if (targetpos.z - whitepos.z >= 0 && targetpos.x - whitepos.x <= 0) { theta = PI - theta; } //2 사분면
-			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x <= 0) { theta = PI + theta; } // 3 사분면
+			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x >= 0) { 
+				theta = -theta; 
+			} //4 사분면
+			if (targetpos.z - whitepos.z >= 0 && targetpos.x - whitepos.x <= 0) { 
+				theta = PI - theta; 
+			} //2 사분면
+			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x <= 0) { 
+				theta = PI + theta; 
+			} // 3 사분면
 			double distance = sqrt(pow(targetpos.x - whitepos.x, 2) + pow(targetpos.z - whitepos.z, 2));
-			g_sphere[3].setPower(distance * cos(theta), distance * sin(theta));
+			g_sphere[0]->setPower(distance * cos(theta), distance * sin(theta));
 
 			break;
 
