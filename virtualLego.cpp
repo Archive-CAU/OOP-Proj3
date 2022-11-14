@@ -18,7 +18,7 @@
 #include <cassert>
 #include <array>
 
-#include "CObject.h"
+//#include "CObject.h"
 #include "CSphere.h"
 #include "CWall.h"
 #include "CLight.h"

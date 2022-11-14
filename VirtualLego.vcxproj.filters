@@ -30,9 +30,6 @@
     <ClCompile Include="CLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CObject.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="CTopWall.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -60,9 +57,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CLight.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CObject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CTopWall.h">

@@ -135,7 +135,6 @@
     <ClCompile Include="CFloor.cpp" />
     <ClCompile Include="CLeftWall.cpp" />
     <ClCompile Include="CLight.cpp" />
-    <ClCompile Include="CObject.cpp" />
     <ClCompile Include="CRightWall.cpp" />
     <ClCompile Include="Csphere.cpp" />
     <ClCompile Include="CTopWall.cpp" />
@@ -150,7 +149,6 @@
     <ClInclude Include="CFloor.h" />
     <ClInclude Include="CLeftWall.h" />
     <ClInclude Include="CLight.h" />
-    <ClInclude Include="CObject.h" />
     <ClInclude Include="CRightWall.h" />
     <ClInclude Include="CSphere.h" />
     <ClInclude Include="CTopWall.h" />
