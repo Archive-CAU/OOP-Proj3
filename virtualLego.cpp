@@ -99,6 +99,7 @@ CSphere	g_target_blueball("blue");
 CLight	g_light;
 CHole g_hole[6];
 
+
 array<CWall*, 4> g_legowall = {
 	new CTopWall(0.0f, 0.12f, 3.06f, d3d::DARKRED),
 	new CBottomWall(0.0f, 0.12f, -3.06f, d3d::DARKRED),
@@ -133,6 +134,7 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mView);
 	D3DXMatrixIdentity(&g_mProj);
 
+	
 	for (i = 0; i < 6; i++)
 	{
 		if (false == g_hole[i].create(Device)) return false;
@@ -144,14 +146,14 @@ bool Setup()
 	g_legoPlane.setPosition(0.0f, -0.0006f / 5, 0.0f);
 
 	// create walls and set the position. note that there are four walls
-	if (false == g_legowall[0]->create(Device, -1, -1, 9, 0.3f, 0.12f, d3d::DARKRED)) return false;
-	g_legowall[0]->setPosition(0.0f, 0.12f, 3.06f);
-	if (false == g_legowall[1]->create(Device, -1, -1, 9, 0.3f, 0.12f, d3d::DARKRED)) return false;
-	g_legowall[1]->setPosition(0.0f, 0.12f, -3.06f);
-	if (false == g_legowall[2]->create(Device, -1, -1, 0.12f, 0.3f, 6.24f, d3d::DARKRED)) return false;
-	g_legowall[2]->setPosition(4.56f, 0.12f, 0.0f);
-	if (false == g_legowall[3]->create(Device, -1, -1, 0.12f, 0.3f, 6.24f, d3d::DARKRED)) return false;
-	g_legowall[3]->setPosition(-4.56f, 0.12f, 0.0f);
+	if (false == g_legowall[0]->create(Device, -1, -1, 9.57, 0.3f, 0.30f, d3d::DARKRED)) return false;
+	g_legowall[0]->setPosition(0.0f, 0.12f, 3.15f);
+	if (false == g_legowall[1]->create(Device, -1, -1, 9.57, 0.3f, 0.30f, d3d::DARKRED)) return false;
+	g_legowall[1]->setPosition(0.0f, 0.12f, -3.15f);
+	if (false == g_legowall[2]->create(Device, -1, -1, 0.30f, 0.3f, 6.24f, d3d::DARKRED)) return false;
+	g_legowall[2]->setPosition(4.65f, 0.12f, 0.0f);
+	if (false == g_legowall[3]->create(Device, -1, -1, 0.30f, 0.3f, 6.24f, d3d::DARKRED)) return false;
+	g_legowall[3]->setPosition(-4.65f, 0.12f, 0.0f);
 
 	// create four balls and set the position
 	for (i = 0; i < 16; i++) {
@@ -264,6 +266,7 @@ bool Display(float timeDelta)
 
 		g_target_blueball.draw(Device, g_mWorld);
 		//g_light.draw(Device);
+
 
 		Device->EndScene();
 		Device->Present(0, 0, 0, 0);

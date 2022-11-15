@@ -23,12 +23,10 @@ protected:
     void setLocalTransform(const D3DXMATRIX& mLocal);
 
 public:
-
     static const float LOSS_RATIO;
 
     CWall(void);
     CWall(float iwidth, float iheight, float idepth, D3DXCOLOR color);
-
     ~CWall(void);
 
     bool create(IDirect3DDevice9* pDevice, float ix, float iz, float iwidth, float iheight, float idepth, D3DXCOLOR color);
@@ -44,7 +42,6 @@ public:
     void adjustPosition(CSphere& ball);
 
     D3DXVECTOR3 getPosition() const; // 객체의 중심 위치를 반환
-    D3DXMATRIX getLocalTransform() const; // 객체의 Local Transform Matrix 반환
 };
 
 #endif
