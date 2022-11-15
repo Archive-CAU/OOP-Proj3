@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="CBottomWall.cpp" />
     <ClCompile Include="CFloor.cpp" />
+    <ClCompile Include="CHole.cpp" />
     <ClCompile Include="CLeftWall.cpp" />
     <ClCompile Include="CLight.cpp" />
     <ClCompile Include="CRightWall.cpp" />
@@ -147,6 +148,7 @@
   <ItemGroup>
     <ClInclude Include="CBottomWall.h" />
     <ClInclude Include="CFloor.h" />
+    <ClInclude Include="CHole.h" />
     <ClInclude Include="CLeftWall.h" />
     <ClInclude Include="CLight.h" />
     <ClInclude Include="CRightWall.h" />

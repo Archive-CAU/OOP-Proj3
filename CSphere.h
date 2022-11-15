@@ -7,7 +7,7 @@ using std::string;
 
 class CSphere 
 {
-private:
+protected:
 	float center_x, center_y, center_z;
 	float m_radius;
 	float m_velocity_x;

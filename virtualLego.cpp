@@ -27,6 +27,7 @@
 #include "CRightWall.h"
 #include "CLeftWall.h"
 #include "CFloor.h"
+#include "CHole.h"
 
 using std::array;
 
@@ -72,7 +73,10 @@ const float spherePos[16][2] = {
 	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 3), (COMMON_RADIUS + 0.01f)} 
 };
 
-
+const float holePos[6][2] = {
+	{-4.45f,-2.95f},{0.05f,-3.05f},{4.5f,-2.95f},
+	{-4.45f,2.95f},{0.05f,3.05f},{4.5f,2.95f}
+};
 
 // -----------------------------------------------------------------------------
 // Transform matrices
@@ -93,6 +97,7 @@ D3DXMATRIX g_mProj;
 CFloor	g_legoPlane;
 CSphere	g_target_blueball("blue");
 CLight	g_light;
+CHole g_hole[6];
 
 array<CWall*, 4> g_legowall = {
 	new CTopWall(0.0f, 0.12f, 3.06f, d3d::DARKRED),
@@ -127,6 +132,12 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mWorld);
 	D3DXMatrixIdentity(&g_mView);
 	D3DXMatrixIdentity(&g_mProj);
+
+	for (i = 0; i < 6; i++)
+	{
+		if (false == g_hole[i].create(Device)) return false;
+		g_hole[i].setPosition(holePos[i][0], -0.23f, holePos[i][1]);
+	}
 
 	// create plane and set the position
 	if (false == g_legoPlane.create(Device, -1, -1, 9, 0.03f, 6, d3d::GREEN)) return false;
@@ -222,6 +233,13 @@ bool Display(float timeDelta)
 				g_legowall[j]->hitBy(*g_sphere[i]); 
 			}
 		}
+		for (i = 0; i < 6; i++)
+		{
+			for (j = 0; j < 16; j++)
+			{
+				g_hole[i].hitBy(*g_sphere[j]);
+			}
+		}
 
 		// check whether any two balls hit together and update the direction of balls
 		for (i = 0; i < 16; i++) {
@@ -239,6 +257,11 @@ bool Display(float timeDelta)
 		for (i = 0; i < 16; i++) {
 			g_sphere[i]->draw(Device, g_mWorld);
 		}
+		for (i = 0; i < 6; i++) {
+			g_hole[i].draw(Device, g_mWorld);
+		}
+			
+
 		g_target_blueball.draw(Device, g_mWorld);
 		//g_light.draw(Device);
 
