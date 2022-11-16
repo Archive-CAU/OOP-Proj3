@@ -1,9 +1,19 @@
+#pragma once
 #ifndef _CSPHERE_
 #define _CSPHERE_
 
 #include "d3dUtility.h"
 #include "string"
 using std::string;
+
+enum class BallType
+{
+	CUE,
+	EIGHT,
+	STRIPE,
+	SOLID,
+	NONE
+};
 
 class CSphere 
 {
@@ -23,6 +33,8 @@ protected:
 	D3DXMATRIX              m_mLocal;
 	D3DMATERIAL9            m_mtrl;
 	ID3DXMesh* m_pSphereMesh;
+
+	BallType ballType;
 
 public:
 	CSphere(void);
@@ -47,6 +59,7 @@ public:
 	void setPosition(float x, float y, float z);
 	double CSphere::getPreCenter_x() const;
 	double CSphere::getPreCenter_z() const;
+	BallType getBallType() const;
 };
 
 #endif

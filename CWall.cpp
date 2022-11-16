@@ -55,15 +55,14 @@ bool CWall::create(IDirect3DDevice9* pDevice, float ix, float iz, float iwidth, 
         return false;
     return true;
 }
-void CWall::destroy(void)
-{
+void CWall::destroy(void) {
     if (m_pBoundMesh != NULL) {
         m_pBoundMesh->Release();
         m_pBoundMesh = NULL;
     }
 }
-void CWall::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
-{
+
+void CWall::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld) {
     if (NULL == pDevice)
         return;
     pDevice->SetTransform(D3DTS_WORLD, &mWorld);
@@ -72,12 +71,9 @@ void CWall::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld)
     m_pBoundMesh->DrawSubset(0);
 }
 
-
-void CWall::setPosition(float x, float y, float z)
-{
+void CWall::setPosition(float x, float y, float z) {
     D3DXMATRIX m;
-    /*this->m_x = x;
-    this->m_z = z;*/
+
     this->center_x = x;
     this->center_y = y;
     this->center_z = z;
@@ -92,9 +88,7 @@ void CWall::setLocalTransform(const D3DXMATRIX& mLocal) { m_mLocal = mLocal; }
 
 void CWall::setType(int type) { type = type; }
 
-void CWall::adjustPosition(CSphere& ball)
-{
-    //보간법으로 근사하여 충돌 시점의 좌표로 이동함.
+void CWall::adjustPosition(CSphere& ball){
     ball.setPosition((ball.getPosition().x + ball.getPreCenter_x()) / 2, ball.getPosition().y, (ball.getPosition().z + ball.getPreCenter_z()) / 2);
     if (this->hasIntersected(ball))
     {
@@ -102,8 +96,7 @@ void CWall::adjustPosition(CSphere& ball)
     }
 }
 
-D3DXVECTOR3 CWall::getPosition() const
-{
+D3DXVECTOR3 CWall::getPosition() const {
     D3DXVECTOR3 org(center_x, center_y, center_z);
     return org;
 }

@@ -29,6 +29,12 @@
 #include "CFloor.h"
 #include "CHole.h"
 
+#include "Status.h"
+#include "Player.h"
+#include "DisplayGameStatus.h"
+#include "d3dUtility.h"
+#include "d3dfont.h"
+
 using std::array;
 
 IDirect3DDevice9* Device = NULL;
@@ -78,6 +84,8 @@ const float holePos[6][2] = {
 	{-4.45f,2.95f},{0.05f,3.05f},{4.5f,2.95f}
 };
 
+
+
 // -----------------------------------------------------------------------------
 // Transform matrices
 // -----------------------------------------------------------------------------
@@ -116,6 +124,12 @@ array<CSphere*, 16> g_sphere = {
 
 double g_camera_pos[3] = { 0.0, 5.0, -8.0 };
 
+Player players[2] = { Player(1), Player(2) };
+vector<Player*> playerVec = { &players[0], &players[1] };
+Status status(playerVec);
+
+DisplayGameStatus displayGameStatus(Width, Height, players);
+
 // -----------------------------------------------------------------------------
 // Functions
 // -----------------------------------------------------------------------------
@@ -134,7 +148,8 @@ bool Setup()
 	D3DXMatrixIdentity(&g_mView);
 	D3DXMatrixIdentity(&g_mProj);
 
-	
+	if (false == displayGameStatus.create("Times New Roman", 16, Device)) return false;
+
 	for (i = 0; i < 6; i++)
 	{
 		if (false == g_hole[i].create(Device)) return false;
@@ -212,6 +227,7 @@ void Cleanup(void)
 	}
 	destroyAllLegoBlock();
 	g_light.destroy();
+	displayGameStatus.destory();
 }
 
 
@@ -228,6 +244,8 @@ bool Display(float timeDelta)
 		Device->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00afafaf, 1.0f, 0);
 		Device->BeginScene();
 
+		displayGameStatus.update();
+
 		// update the position of each ball. during update, check whether each ball hit by walls.
 		for (i = 0; i < 16; i++) {
 			g_sphere[i]->ballUpdate(timeDelta);
@@ -235,10 +253,19 @@ bool Display(float timeDelta)
 				g_legowall[j]->hitBy(*g_sphere[i]); 
 			}
 		}
+
 		for (i = 0; i < 6; i++)
 		{
 			for (j = 0; j < 16; j++)
 			{
+				if (g_hole[i].hasIntersected(*g_sphere[j]) && status.getTurnPlayer()->getBallType() == BallType::NONE &&
+					g_sphere[j]->getBallType() != BallType::EIGHT && g_sphere[j]->getBallType() != BallType::CUE)
+				{
+					// TODO : Check
+					BallType nowBallType = g_sphere[j]->getBallType();
+					status.getTurnPlayer()->setBallType(nowBallType);
+					status.getNotTurnPlayer()->setBallType((nowBallType == BallType::STRIPE) ? BallType::SOLID : BallType::STRIPE);
+				}
 				g_hole[i].hitBy(*g_sphere[j]);
 			}
 		}

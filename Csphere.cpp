@@ -1,5 +1,6 @@
 #include "CSphere.h"
-
+#include <stdlib.h> 
+#include <cstdlib>
 
 #define M_RADIUS 0.14   // ball radius
 #define PI 3.14159265
@@ -32,10 +33,15 @@ CSphere::CSphere(const char* ballImageFileName) {
 	D3DXMatrixIdentity(&m_mLocal);
 	D3DXMatrixIdentity(&this->ballRoll);
 	this->ballImageFileName = ballImageFileName;
+
+	int tempBallType = atoi(ballImageFileName);
+	if (tempBallType == 0) this->ballType = BallType::CUE;
+	else if (tempBallType > 0 && tempBallType < 8) this->ballType = BallType::SOLID;
+	else if (tempBallType == 8) this->ballType = BallType::EIGHT;
+	else if (tempBallType > 8 && tempBallType < 16) this->ballType = BallType::STRIPE;
 }
 
 CSphere::~CSphere(void) {}
-
 
 bool CSphere::create(IDirect3DDevice9* pDevice) {
 	if (NULL == pDevice)
@@ -242,4 +248,8 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev) {
 	}
 
 	return texMesh;
+}
+BallType CSphere::getBallType() const
+{
+	return this->ballType;
 }

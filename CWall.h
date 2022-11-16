@@ -41,7 +41,7 @@ public:
     void setType(int type);
     void adjustPosition(CSphere& ball);
 
-    D3DXVECTOR3 getPosition() const; // 객체의 중심 위치를 반환
+    D3DXVECTOR3 getPosition() const; 
 };
 
 #endif

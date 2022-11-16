@@ -16,7 +16,6 @@ CHole::CHole() : m_radius(0.25)
 	m_mtrl.Power = 5.0f;
 }
 
-
 CHole::~CHole()
 {
 }
@@ -27,18 +26,17 @@ bool CHole::create(IDirect3DDevice9* pDevice) {
 		return false;
 	}
 
-	HRESULT hr = D3DXCreateCylinder(pDevice, m_radius, m_radius, 0.5f, 50, 50, &m_pSphereMesh, nullptr);
+	HRESULT hr = D3DXCreateCylinder(pDevice, m_radius, m_radius, 0.50f, 50, 50, &m_pSphereMesh, nullptr);
 	D3DXMatrixRotationX(&rotationMat, 33);
 	setLocalTransform(m_mLocal);
 
 	if (FAILED(hr))
 	{
-		MessageBox(0, "fail rotation", 0, 0);
 		return false;
 	}
 
 	return true;
-}
+} 
 
 void CHole::destroy() {
 	if (m_pSphereMesh != nullptr)
