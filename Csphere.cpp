@@ -1,6 +1,9 @@
 #include "CSphere.h"
 #include <stdlib.h> 
 #include <cstdlib>
+#include "Status.h"
+
+extern Status status;
 
 #define M_RADIUS 0.14   // ball radius
 #define PI 3.14159265
@@ -252,4 +255,25 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev) {
 BallType CSphere::getBallType() const
 {
 	return this->ballType;
+}
+
+void CSphere::disable() noexcept
+{
+	//TODO : get turn count to record disableTurn
+	this->disableTurn = status.getCurrentTurnCount();
+}
+
+void CSphere::enable() noexcept
+{
+	this->disableTurn = -1;
+}
+
+int CSphere::getDisableTurn() const noexcept
+{
+	return this->disableTurn;
+}
+
+bool CSphere::isDisabled() const noexcept
+{
+	return (this->disableTurn != -1);
 }

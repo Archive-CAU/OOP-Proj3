@@ -19,6 +19,7 @@
 #include <array>
 
 #include "CSphere.h"
+#include "CCueSphere.h"
 #include "CWall.h"
 #include "CLight.h"
 
@@ -32,6 +33,8 @@
 #include "Status.h"
 #include "Player.h"
 #include "DisplayGameStatus.h"
+#include "FoulManager.h"
+#include "TurnManager.h"
 #include "d3dUtility.h"
 #include "d3dfont.h"
 
@@ -116,7 +119,7 @@ array<CWall*, 4> g_legowall = {
 };
 
 array<CSphere*, 16> g_sphere = {
-	new CSphere("0"), new CSphere("1"), new CSphere("2"), new CSphere("3"),
+	new CCueSphere("0"), new CSphere("1"), new CSphere("2"), new CSphere("3"),
 	new CSphere("4"), new CSphere("5"), new CSphere("6"), new CSphere("7"),
 	new CSphere("8"), new CSphere("9"), new CSphere("10"), new CSphere("11"),
 	new CSphere("12"), new CSphere("13"), new CSphere("14"), new CSphere("15")
@@ -128,8 +131,11 @@ Player players[2] = { Player(1), Player(2) };
 vector<Player*> playerVec = { &players[0], &players[1] };
 Status status(playerVec);
 
+TurnManager turnManager(status.getPlayerIdList());
+FoulManager foulManager;
 DisplayGameStatus displayGameStatus(Width, Height, players);
 
+HWND window;
 // -----------------------------------------------------------------------------
 // Functions
 // -----------------------------------------------------------------------------
@@ -261,7 +267,6 @@ bool Display(float timeDelta)
 				if (g_hole[i].hasIntersected(*g_sphere[j]) && status.getTurnPlayer()->getBallType() == BallType::NONE &&
 					g_sphere[j]->getBallType() != BallType::EIGHT && g_sphere[j]->getBallType() != BallType::CUE)
 				{
-					// TODO : Check
 					BallType nowBallType = g_sphere[j]->getBallType();
 					status.getTurnPlayer()->setBallType(nowBallType);
 					status.getNotTurnPlayer()->setBallType((nowBallType == BallType::STRIPE) ? BallType::SOLID : BallType::STRIPE);
@@ -298,6 +303,28 @@ bool Display(float timeDelta)
 		Device->EndScene();
 		Device->Present(0, 0, 0, 0);
 		Device->SetTexture(0, NULL);
+
+		
+	}
+
+	foulManager.checkFoul();
+
+	if (!turnManager.processTurn(g_sphere)) {
+
+		if (foulManager.isLose())
+		{
+			//MessageBox(nullptr, "게임이 끝남", nullptr, 0);
+			status.setWinnerPlayer(status.getNotTurnPlayer()->getPlayerId());
+		}
+
+		if (status.getGameEndStatus())
+		{
+			string msg = "Player " + std::to_string(status.getWinnerPlayer()) + " 승리!";
+			MessageBox(nullptr, msg.c_str(), nullptr, 0);
+			::DestroyWindow(window);
+			return true;
+		}
+
 	}
 	return true;
 }
@@ -308,6 +335,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	static bool isReset = true;
 	static int old_x = 0;
 	static int old_y = 0;
+	static int old_z = 0;
 	static enum { WORLD_MOVE, LIGHT_MOVE, BLOCK_MOVE } move = WORLD_MOVE;
 
 	switch (msg) {
@@ -330,23 +358,23 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		case VK_SPACE:
-
+			if (status.getTurnProgressStatus()) break;
 			D3DXVECTOR3 targetpos = g_target_blueball.getPosition();
 			D3DXVECTOR3	whitepos = g_sphere[0]->getPosition();
 			double theta = acos(sqrt(pow(targetpos.x - whitepos.x, 2)) / sqrt(pow(targetpos.x - whitepos.x, 2) +
 				pow(targetpos.z - whitepos.z, 2)));		// 기본 1 사분면
-			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x >= 0) { 
-				theta = -theta; 
+			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x >= 0) {
+				theta = -theta;
 			} //4 사분면
-			if (targetpos.z - whitepos.z >= 0 && targetpos.x - whitepos.x <= 0) { 
-				theta = PI - theta; 
+			if (targetpos.z - whitepos.z >= 0 && targetpos.x - whitepos.x <= 0) {
+				theta = PI - theta;
 			} //2 사분면
-			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x <= 0) { 
-				theta = PI + theta; 
+			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x <= 0) {
+				theta = PI + theta;
 			} // 3 사분면
 			double distance = sqrt(pow(targetpos.x - whitepos.x, 2) + pow(targetpos.z - whitepos.z, 2));
 			g_sphere[0]->setPower(distance * cos(theta), distance * sin(theta));
-
+			turnManager.processTriggerOn();
 			break;
 
 		}
@@ -354,6 +382,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 
 	case WM_MOUSEMOVE:
+	
 	{
 		int new_x = LOWORD(lParam);
 		int new_y = HIWORD(lParam);
@@ -361,7 +390,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		float dy;
 
 		if (LOWORD(wParam) & MK_LBUTTON) {
-
+			
 			if (isReset) {
 				isReset = false;
 			}
@@ -408,12 +437,10 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	}
 
 	return ::DefWindowProc(hwnd, msg, wParam, lParam);
+	
 }
 
-int WINAPI WinMain(HINSTANCE hinstance,
-	HINSTANCE prevInstance,
-	PSTR cmdLine,
-	int showCmd)
+int WINAPI WinMain(HINSTANCE hinstance, HINSTANCE prevInstance, PSTR cmdLine, int showCmd)
 {
 	srand(static_cast<unsigned int>(time(NULL)));
 

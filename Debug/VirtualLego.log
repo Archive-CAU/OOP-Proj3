@@ -4,41 +4,8 @@ C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\d3dUti
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\ucrt\corecrt_math.h(88): message : 'INFINITY'의 이전 정의를 참조하십시오.
 C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\Status.h(22,3): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\Status.h(57,65): warning C4290: 함수가 __declspec(nothrow)가 아님을 나타내려는 경우를 제외하고 C++ 예외 사양은 무시됩니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\virtualLego.cpp(164,5): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\virtualLego.cpp(166,5): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\virtualLego.cpp(395,17): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\virtualLego.cpp(396,17): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  status.cpp
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\d3dUtility.h(23,1): warning C4005: 'INFINITY': 매크로 재정의
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\ucrt\corecrt_math.h(88): message : 'INFINITY'의 이전 정의를 참조하십시오.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\Status.h(22,3): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\Status.h(57,65): warning C4290: 함수가 __declspec(nothrow)가 아님을 나타내려는 경우를 제외하고 C++ 예외 사양은 무시됩니다.
-  Player.cpp
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\d3dUtility.h(23,1): warning C4005: 'INFINITY': 매크로 재정의
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\ucrt\corecrt_math.h(88): message : 'INFINITY'의 이전 정의를 참조하십시오.
-  DisplayGameStatus.cpp
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\d3dUtility.h(23,1): warning C4005: 'INFINITY': 매크로 재정의
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.19041.0\ucrt\corecrt_math.h(88): message : 'INFINITY'의 이전 정의를 참조하십시오.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\status.h(22,3): warning C4996: 'strcpy': This function or variable may be unsafe. Consider using strcpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\status.h(57,65): warning C4290: 함수가 __declspec(nothrow)가 아님을 나타내려는 경우를 제외하고 C++ 예외 사양은 무시됩니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(21,28): warning C4154: 배열 식을 삭제했습니다. 포인터로 변환이 제공됩니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(96,82): warning C4305: '인수': '__int64'에서 'DWORD'(으)로 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(96,42): warning C4309: '인수': 상수 값이 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(97,46): warning C4244: '인수': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(102,46): warning C4244: '인수': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(106,86): warning C4305: '인수': '__int64'에서 'DWORD'(으)로 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(106,41): warning C4309: '인수': 상수 값이 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(107,101): warning C4305: '인수': '__int64'에서 'DWORD'(으)로 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(107,56): warning C4309: '인수': 상수 값이 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(107,45): warning C4244: '인수': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(109,85): warning C4305: '인수': '__int64'에서 'DWORD'(으)로 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(109,41): warning C4309: '인수': 상수 값이 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(110,100): warning C4305: '인수': '__int64'에서 'DWORD'(으)로 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(110,56): warning C4309: '인수': 상수 값이 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(110,45): warning C4244: '인수': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(112,91): warning C4305: '인수': '__int64'에서 'DWORD'(으)로 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(112,54): warning C4309: '인수': 상수 값이 잘립니다.
-C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\DisplayGameStatus.cpp(112,45): warning C4244: '인수': 'int'에서 'FLOAT'(으)로 변환하면서 데이터가 손실될 수 있습니다.
-  코드를 생성하고 있습니다...
-CBottomWall.obj : warning LNK4075: '/EDITANDCONTINUE'이(가) '/SAFESEH' 사양으로 인해 무시됩니다.
+C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\virtualLego.cpp(170,5): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\virtualLego.cpp(172,5): warning C4305: '인수': 'double'에서 'float'(으)로 잘립니다.
+C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\virtualLego.cpp(424,17): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
+C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\virtualLego.cpp(425,17): warning C4244: '=': 'int'에서 'float'(으)로 변환하면서 데이터가 손실될 수 있습니다.
   VirtualLego.vcxproj -> C:\Users\mj043\Desktop\객체지향프로그래밍\소스코드\OOP-Proj3\Debug\VirtualLego.exe
