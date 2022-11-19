@@ -72,10 +72,11 @@ bool CHole::hasIntersected(CSphere& ball) const {
 
 
 void CHole::hitBy(CSphere& ball) {
-	if (this->hasIntersected(ball))
+	if (this->hasIntersected(ball) && !ball.isDisabled())
 	{
 		ball.setPosition(100000, ball.getPosition().y, 100000);
 		ball.setPower(0.0f, 0.0f);
+		ball.disable();
 	}
 }
 

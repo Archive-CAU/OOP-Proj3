@@ -1,18 +1,6 @@
-#pragma once
-#include "CSphere.h"
 #ifndef _PLAYER_
 #define _PLAYER_
-
-//enum class BallType
-//{
-//	CUE,
-//	EIGHT,
-//	STRIPE,
-//	SOLID,
-//	NONE
-//};
-
-
+#include "CSphere.h"
 
 
 class Player

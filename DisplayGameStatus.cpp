@@ -58,7 +58,7 @@ string DisplayGameStatus::_getBallType(const BallType b)
 		break;
 	case BallType::STRIPE: result = "STRIPE";
 		break;
-	case BallType::EIGHT: result = "BALCK";
+	case BallType::EIGHT: result = "EIGHT";
 		break;
 	}
 
@@ -71,11 +71,11 @@ string DisplayGameStatus::_getTurnStatus()
 
 	if (status.getTurnProgressStatus() == true)
 	{
-		result = "Processing...";
+		result = "Moving...";
 	}
 	else if (status.getFoulStatus() == true)
 	{
-		result = "FREE BALL";
+		result = "Hit the Ball!";
 	}
 
 	return result;

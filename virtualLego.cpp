@@ -29,9 +29,13 @@
 #include "CFloor.h"
 #include "CHole.h"
 
+#include "CHandSphere.h"
+
 #include "Status.h"
 #include "Player.h"
 #include "DisplayGameStatus.h"
+#include "FoulManager.h"
+#include "TurnManager.h"
 #include "d3dUtility.h"
 #include "d3dfont.h"
 
@@ -116,7 +120,7 @@ array<CWall*, 4> g_legowall = {
 };
 
 array<CSphere*, 16> g_sphere = {
-	new CSphere("0"), new CSphere("1"), new CSphere("2"), new CSphere("3"),
+	new CHandSphere("0"), new CSphere("1"), new CSphere("2"), new CSphere("3"),
 	new CSphere("4"), new CSphere("5"), new CSphere("6"), new CSphere("7"),
 	new CSphere("8"), new CSphere("9"), new CSphere("10"), new CSphere("11"),
 	new CSphere("12"), new CSphere("13"), new CSphere("14"), new CSphere("15")
@@ -128,8 +132,10 @@ Player players[2] = { Player(1), Player(2) };
 vector<Player*> playerVec = { &players[0], &players[1] };
 Status status(playerVec);
 
+TurnManager turnManager(status.getPlayerIdList());
+FoulManager foulManager;
 DisplayGameStatus displayGameStatus(Width, Height, players);
-
+HWND window;
 // -----------------------------------------------------------------------------
 // Functions
 // -----------------------------------------------------------------------------
@@ -254,29 +260,36 @@ bool Display(float timeDelta)
 			}
 		}
 
+		for (i = 0; i < 16; i++)
+		{
+			for (j = 0; j < 16; j++)
+			{
+				if (i >= j)
+				{
+					continue;
+				}
+				g_sphere[i]->hitBy(*g_sphere[j]);
+			}
+		}
+
 		for (i = 0; i < 6; i++)
 		{
 			for (j = 0; j < 16; j++)
 			{
 				if (g_hole[i].hasIntersected(*g_sphere[j]) && status.getTurnPlayer()->getBallType() == BallType::NONE &&
-					g_sphere[j]->getBallType() != BallType::EIGHT && g_sphere[j]->getBallType() != BallType::CUE)
+					g_sphere[j]->getBallType() != BallType::EIGHT && g_sphere[j]->getBallType() != BallType::HAND)
 				{
 					// TODO : Check
 					BallType nowBallType = g_sphere[j]->getBallType();
 					status.getTurnPlayer()->setBallType(nowBallType);
 					status.getNotTurnPlayer()->setBallType((nowBallType == BallType::STRIPE) ? BallType::SOLID : BallType::STRIPE);
 				}
+
 				g_hole[i].hitBy(*g_sphere[j]);
 			}
 		}
 
-		// check whether any two balls hit together and update the direction of balls
-		for (i = 0; i < 16; i++) {
-			for (j = 0; j < 16; j++) {
-				if (i >= j) { continue; }
-				g_sphere[i]->hitBy(*g_sphere[j]);
-			}
-		}
+		
 
 		// draw plane, walls, and spheres
 		g_legoPlane.draw(Device, g_mWorld);
@@ -298,6 +311,26 @@ bool Display(float timeDelta)
 		Device->EndScene();
 		Device->Present(0, 0, 0, 0);
 		Device->SetTexture(0, NULL);
+	}
+
+	foulManager.checkFoul();
+
+	if (!turnManager.processTurn(g_sphere)) {
+
+		if (foulManager.isLose())
+		{
+			//MessageBox(nullptr, "게임이 끝남", nullptr, 0);
+			status.setWinnerPlayer(status.getNotTurnPlayer()->getPlayerId());
+		}
+
+		if (status.getGameEndStatus())
+		{
+			string msg = "Player " + std::to_string(status.getWinnerPlayer()) + " 승리!";
+			MessageBox(nullptr, msg.c_str(), nullptr, 0);
+			::DestroyWindow(window);
+			return true;
+		}
+
 	}
 	return true;
 }
@@ -330,23 +363,25 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			}
 			break;
 		case VK_SPACE:
-
-			D3DXVECTOR3 targetpos = g_target_blueball.getPosition();
-			D3DXVECTOR3	whitepos = g_sphere[0]->getPosition();
-			double theta = acos(sqrt(pow(targetpos.x - whitepos.x, 2)) / sqrt(pow(targetpos.x - whitepos.x, 2) +
-				pow(targetpos.z - whitepos.z, 2)));		// 기본 1 사분면
-			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x >= 0) { 
-				theta = -theta; 
-			} //4 사분면
-			if (targetpos.z - whitepos.z >= 0 && targetpos.x - whitepos.x <= 0) { 
-				theta = PI - theta; 
-			} //2 사분면
-			if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x <= 0) { 
-				theta = PI + theta; 
-			} // 3 사분면
-			double distance = sqrt(pow(targetpos.x - whitepos.x, 2) + pow(targetpos.z - whitepos.z, 2));
-			g_sphere[0]->setPower(distance * cos(theta), distance * sin(theta));
-
+			if (!status.getTurnProgressStatus()) {
+				D3DXVECTOR3 targetpos = g_target_blueball.getPosition();
+				D3DXVECTOR3	whitepos = g_sphere[0]->getPosition();
+				double theta = acos(sqrt(pow(targetpos.x - whitepos.x, 2)) / sqrt(pow(targetpos.x - whitepos.x, 2) +
+					pow(targetpos.z - whitepos.z, 2)));		// 기본 1 사분면
+				if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x >= 0) { 
+					theta = -theta; 
+				} //4 사분면
+				if (targetpos.z - whitepos.z >= 0 && targetpos.x - whitepos.x <= 0) { 
+					theta = PI - theta; 
+				} //2 사분면
+				if (targetpos.z - whitepos.z <= 0 && targetpos.x - whitepos.x <= 0) { 
+					theta = PI + theta; 
+				} // 3 사분면
+				double distance = sqrt(pow(targetpos.x - whitepos.x, 2) + pow(targetpos.z - whitepos.z, 2));
+				g_sphere[0]->setPower(distance * cos(theta), distance * sin(theta));
+				turnManager.processTriggerOn();
+			}
+			
 			break;
 
 		}
@@ -360,7 +395,8 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		float dx;
 		float dy;
 
-		if (LOWORD(wParam) & MK_LBUTTON) {
+		if ((LOWORD(wParam) & MK_LBUTTON)) {
+			
 
 			if (isReset) {
 				isReset = false;

@@ -1,4 +1,3 @@
-#pragma once
 #ifndef _STATUS_
 #define _STATUS_
 #include <exception>

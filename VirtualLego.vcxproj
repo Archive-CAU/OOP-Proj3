@@ -133,6 +133,7 @@
   <ItemGroup>
     <ClCompile Include="CBottomWall.cpp" />
     <ClCompile Include="CFloor.cpp" />
+    <ClCompile Include="CHandSphere.cpp" />
     <ClCompile Include="CHole.cpp" />
     <ClCompile Include="CLeftWall.cpp" />
     <ClCompile Include="CLight.cpp" />
@@ -145,8 +146,10 @@
     <ClCompile Include="d3dUtility.cpp" />
     <ClCompile Include="DisplayGameStatus.cpp" />
     <ClCompile Include="dxutil.cpp" />
+    <ClCompile Include="FoulManager.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="status.cpp" />
+    <ClCompile Include="TurnManager.cpp" />
     <ClCompile Include="virtualLego.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -154,6 +157,7 @@
   <ItemGroup>
     <ClInclude Include="CBottomWall.h" />
     <ClInclude Include="CFloor.h" />
+    <ClInclude Include="CHandSphere.h" />
     <ClInclude Include="CHole.h" />
     <ClInclude Include="CLeftWall.h" />
     <ClInclude Include="CLight.h" />
@@ -166,8 +170,10 @@
     <ClInclude Include="d3dUtility.h" />
     <ClInclude Include="DisplayGameStatus.h" />
     <ClInclude Include="dxutil.h" />
+    <ClInclude Include="FoulManager.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="status.h" />
+    <ClInclude Include="TurnManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

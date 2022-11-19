@@ -1,7 +1,9 @@
 #include "CSphere.h"
 #include <stdlib.h> 
 #include <cstdlib>
+#include "Status.h"
 
+extern Status status;
 #define M_RADIUS 0.14   // ball radius
 #define PI 3.14159265
 #define M_HEIGHT 0.01
@@ -35,7 +37,7 @@ CSphere::CSphere(const char* ballImageFileName) {
 	this->ballImageFileName = ballImageFileName;
 
 	int tempBallType = atoi(ballImageFileName);
-	if (tempBallType == 0) this->ballType = BallType::CUE;
+	if (tempBallType == 0) this->ballType = BallType::HAND;
 	else if (tempBallType > 0 && tempBallType < 8) this->ballType = BallType::SOLID;
 	else if (tempBallType == 8) this->ballType = BallType::EIGHT;
 	else if (tempBallType > 8 && tempBallType < 16) this->ballType = BallType::STRIPE;
@@ -252,4 +254,25 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev) {
 BallType CSphere::getBallType() const
 {
 	return this->ballType;
+}
+
+void CSphere::disable() noexcept
+{
+	//TODO : get turn count to record disableTurn
+	this->disableTurn = status.getCurrentTurnCount();
+}
+
+void CSphere::enable() noexcept
+{
+	this->disableTurn = -1;
+}
+
+int CSphere::getDisableTurn() const noexcept
+{
+	return this->disableTurn;
+}
+
+bool CSphere::isDisabled() const noexcept
+{
+	return (this->disableTurn != -1);
 }
