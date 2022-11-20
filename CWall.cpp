@@ -37,8 +37,7 @@ CWall::CWall(float iwidth, float iheight, float idepth, D3DXCOLOR color) {
 
 CWall::~CWall(void) {}
 
-bool CWall::create(IDirect3DDevice9* pDevice, float ix, float iz, float iwidth, float iheight, float idepth, D3DXCOLOR color = d3d::WHITE)
-{
+bool CWall::create(IDirect3DDevice9* pDevice, float ix, float iz, float iwidth, float iheight, float idepth, D3DXCOLOR color = d3d::WHITE) {
     if (NULL == pDevice)
         return false;
 

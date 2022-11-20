@@ -2,17 +2,10 @@
 #define _CSPHERE_
 
 #include "d3dUtility.h"
+#include "Player.h"
 #include "string"
-using std::string;
 
-enum class BallType
-{
-	HAND,
-	EIGHT,
-	STRIPE,
-	SOLID,
-	NONE
-};
+using std::string;
 
 class CSphere 
 {
@@ -21,12 +14,14 @@ protected:
 	float m_radius;
 	float m_velocity_x;
 	float m_velocity_z;
-	int disableTurn = -1;
+	
 	string ballImageFileName = string();
 	D3DXMATRIX ballRoll;
 
+	int disableTurn = -1;
 	float pre_center_x, pre_center_z;
 	typedef CSphere super;
+
 	IDirect3DTexture9* Tex = nullptr;
 	LPD3DXMESH _createMappedSphere(IDirect3DDevice9* pDev);
 	D3DXMATRIX              m_mLocal;
@@ -60,10 +55,10 @@ public:
 	double CSphere::getPreCenter_z() const;
 	BallType getBallType() const;
 
-	void disable() noexcept; // 공을 비활성화 함
-	void enable() noexcept; // 공을 활성화 함
-	int getDisableTurn() const noexcept; // 공이 비활성화 된 턴을 반환
-	bool isDisabled() const noexcept; // 공이 비활성화 되었는지 반환
+	void disable() noexcept; 
+	void enable() noexcept; 
+	int getDisableTurn() const noexcept; 
+	bool isDisabled() const noexcept; 
 };
 
 #endif

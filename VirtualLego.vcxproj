@@ -138,7 +138,7 @@
     <ClCompile Include="CLeftWall.cpp" />
     <ClCompile Include="CLight.cpp" />
     <ClCompile Include="CRightWall.cpp" />
-    <ClCompile Include="Csphere.cpp" />
+    <ClCompile Include="CSphere.cpp" />
     <ClCompile Include="CTopWall.cpp" />
     <ClCompile Include="CWall.cpp" />
     <ClCompile Include="d3dfont.cpp" />

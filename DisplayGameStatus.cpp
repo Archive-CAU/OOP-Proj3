@@ -73,7 +73,7 @@ string DisplayGameStatus::_getTurnStatus()
 	{
 		result = "Moving...";
 	}
-	else if (status.getFoulStatus() == true)
+	else if (status.getTurnProgressStatus() == false)
 	{
 		result = "Hit the Ball!";
 	}

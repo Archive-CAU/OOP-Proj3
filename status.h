@@ -10,7 +10,6 @@
 using std::vector;
 using std::exception;
 
-/* Custom Exception Class. */
 class PlayerNotFoundException : public exception
 {
 private:

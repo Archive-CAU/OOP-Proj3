@@ -21,7 +21,7 @@
     <ClCompile Include="virtualLego.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Csphere.cpp">
+    <ClCompile Include="CSphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CWall.cpp">

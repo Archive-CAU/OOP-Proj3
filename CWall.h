@@ -28,19 +28,15 @@ public:
     CWall(void);
     CWall(float iwidth, float iheight, float idepth, D3DXCOLOR color);
     ~CWall(void);
-
     bool create(IDirect3DDevice9* pDevice, float ix, float iz, float iwidth, float iheight, float idepth, D3DXCOLOR color);
     void destroy(void);
     void draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld);
-
     virtual bool hasIntersected(CSphere& ball) const noexcept = 0;
     virtual void hitBy(CSphere& ball) noexcept = 0;
-
     void setPosition(float x, float y, float z);
     float getHeight(void) const;
     void setType(int type);
     void adjustPosition(CSphere& ball);
-
     D3DXVECTOR3 getPosition() const; 
 };
 

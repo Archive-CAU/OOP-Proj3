@@ -4,7 +4,7 @@
 #include "Status.h"
 
 extern Status status;
-#define M_RADIUS 0.14   // ball radius
+#define M_RADIUS 0.14   
 #define PI 3.14159265
 #define M_HEIGHT 0.01
 #define DECREASE_RATE 0.9982
@@ -46,8 +46,7 @@ CSphere::CSphere(const char* ballImageFileName) {
 CSphere::~CSphere(void) {}
 
 bool CSphere::create(IDirect3DDevice9* pDevice) {
-	if (NULL == pDevice)
-		return false;
+	if (NULL == pDevice) return false;
 
 	m_mtrl.Diffuse = d3d::WHITE;
 	m_mtrl.Ambient = d3d::WHITE;
@@ -63,8 +62,7 @@ bool CSphere::create(IDirect3DDevice9* pDevice) {
 
 	string filePath = "./image/" + this->ballImageFileName + ".bmp";
 
-	if (FAILED(D3DXCreateTextureFromFile(pDevice, filePath.c_str(), &Tex)))
-	{
+	if (FAILED(D3DXCreateTextureFromFile(pDevice, filePath.c_str(), &Tex))) {
 		return false;
 	}
 
@@ -94,12 +92,12 @@ void CSphere::draw(IDirect3DDevice9* pDevice, const D3DXMATRIX& mWorld) {
 bool CSphere::hasIntersected(CSphere& ball) {
 	D3DXVECTOR3 cord = this->getPosition();
 	D3DXVECTOR3 ball_cord = ball.getPosition();
+
 	double xDistance = abs((cord.x - ball_cord.x) * (cord.x - ball_cord.x));
 	double zDistance = abs((cord.z - ball_cord.z) * (cord.z - ball_cord.z));
 	double totalDistance = sqrt(xDistance + zDistance);
 
-	if (totalDistance < (this->getRadius() + ball.getRadius()))
-	{
+	if (totalDistance < (this->getRadius() + ball.getRadius())) {
 		return true;
 	}
 
@@ -144,9 +142,8 @@ void CSphere::ballUpdate(float timeDiff) {
 	this->pre_center_x = cord.x;
 	this->pre_center_z = cord.z;
 
-	if (vx > 0.01 || vz > 0.01)
-	{
-		const float SPIN_RATIO = 0.01;
+	if (vx > 0.01 || vz > 0.01) {
+		const float SPIN_RATIO = 0.012;
 
 		float tX = cord.x + TIME_SCALE * timeDiff * m_velocity_x;
 		float tZ = cord.z + TIME_SCALE * timeDiff * m_velocity_z;
@@ -186,7 +183,6 @@ float CSphere::getRadius(void)  const { return (float)(M_RADIUS); }
 const D3DXMATRIX& CSphere::getLocalTransform(void) const { return m_mLocal; }
 void CSphere::setLocalTransform(const D3DXMATRIX& mLocal) { m_mLocal = mLocal; }
 
-
 D3DXVECTOR3 CSphere::getPosition() const {
 	D3DXVECTOR3 org(center_x, center_y, center_z);
 	return org;
@@ -194,7 +190,7 @@ D3DXVECTOR3 CSphere::getPosition() const {
 
 void CSphere::adjustPosition(CSphere& ball) {
 	D3DXVECTOR3 ball_cord = ball.getPosition();
-	//보간법으로 근사하여 충돌 시점의 좌표로 이동함.
+	
 	this->setPosition((center_x + this->pre_center_x) / 2, center_y, (center_z + this->pre_center_z) / 2);
 	ball.setPosition((ball_cord.x + ball.pre_center_x) / 2, ball_cord.y, (ball_cord.z + ball.pre_center_z) / 2);
 	if (this->hasIntersected(ball))
@@ -228,7 +224,6 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev) {
 	if (FAILED(D3DXCreateSphere(pDev, this->getRadius(), 50, 50, &mesh, NULL)))
 		return nullptr;
 
-
 	LPD3DXMESH texMesh;
 	if (FAILED(mesh->CloneMeshFVF(D3DXMESH_SYSTEMMEM, FVF_VERTEX, pDev, &texMesh)))
 		return mesh;
@@ -245,34 +240,28 @@ LPD3DXMESH CSphere::_createMappedSphere(IDirect3DDevice9* pDev) {
 
 			pVerts++;
 		}
-
 		texMesh->UnlockVertexBuffer();
 	}
 
 	return texMesh;
 }
-BallType CSphere::getBallType() const
-{
+
+BallType CSphere::getBallType() const {
 	return this->ballType;
 }
 
-void CSphere::disable() noexcept
-{
-	//TODO : get turn count to record disableTurn
+void CSphere::disable() noexcept {
 	this->disableTurn = status.getCurrentTurnCount();
 }
 
-void CSphere::enable() noexcept
-{
+void CSphere::enable() noexcept {
 	this->disableTurn = -1;
 }
 
-int CSphere::getDisableTurn() const noexcept
-{
+int CSphere::getDisableTurn() const noexcept {
 	return this->disableTurn;
 }
 
-bool CSphere::isDisabled() const noexcept
-{
+bool CSphere::isDisabled() const noexcept {
 	return (this->disableTurn != -1);
 }

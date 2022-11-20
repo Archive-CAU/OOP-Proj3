@@ -21,16 +21,13 @@
 #include "CSphere.h"
 #include "CWall.h"
 #include "CLight.h"
-
 #include "CTopWall.h"
 #include "CBottomWall.h"
 #include "CRightWall.h"
 #include "CLeftWall.h"
 #include "CFloor.h"
 #include "CHole.h"
-
 #include "CHandSphere.h"
-
 #include "Status.h"
 #include "Player.h"
 #include "DisplayGameStatus.h"
@@ -46,41 +43,36 @@ IDirect3DDevice9* Device = NULL;
 // window size
 const int Width = 1024;
 const int Height = 768;
+
+// ball setting
 const float BALL_SET_RATIO = 1.82f;
 const float COMMON_RADIUS = 0.14f;
 
-// There are four balls
-// initialize the position (coordinate) of each ball (ball0 ~ ball3)
-//const float spherePos[4][2] = { {-2.7f,0} , {+2.4f,0} , {3.3f,0} , {-2.7f,-0.9f} };
-const float spherePos[16][2] = {
 
-	//white ball
+const float spherePos[16][2] = {
+	//hand ball
 	{-2.7f, 0},
 
-	//color ball
-	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 3), (COMMON_RADIUS * 3 + 0.03f)},
-	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), (COMMON_RADIUS * 2 + 0.02f)},
-
-	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO)), -(COMMON_RADIUS + 0.01f)},
-	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), -(COMMON_RADIUS * 4 + 0.04f)},
-	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 2), -(COMMON_RADIUS * 2 + 0.02f)},
+	//solid
+	{1.5f, 0}, 
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), (COMMON_RADIUS * 2 + 0.02f)}, 
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO)), -(COMMON_RADIUS + 0.01f)}, 
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), -(COMMON_RADIUS * 2 + 0.02f)}, 
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 3), (COMMON_RADIUS * 3 + 0.03f)},   
 	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 2), (COMMON_RADIUS * 2 + 0.02f)},
 	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 3), -(COMMON_RADIUS + 0.01f)},
 
 	//black ball
-	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 2), 0},
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 2), 0}, 
 
 	//striple ball
 	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 3), -(COMMON_RADIUS * 3 + 0.03f)},
-
-	{+1.5f, 0},
-	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), -(COMMON_RADIUS * 2 + 0.02f)},
-
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 3), (COMMON_RADIUS + 0.01f)}, 
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), -(COMMON_RADIUS * 4 + 0.04f)}, 
 	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO)), COMMON_RADIUS + 0.01f},
-
 	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), 0},
 	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 4), (COMMON_RADIUS * 4 + 0.04f)},
-	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 3), (COMMON_RADIUS + 0.01f)} 
+	{(1.5f + (COMMON_RADIUS * BALL_SET_RATIO) * 2), -(COMMON_RADIUS * 2 + 0.02f)} 
 };
 
 const float holePos[6][2] = {
@@ -136,11 +128,11 @@ TurnManager turnManager(status.getPlayerIdList());
 FoulManager foulManager;
 DisplayGameStatus displayGameStatus(Width, Height, players);
 HWND window;
+
+
 // -----------------------------------------------------------------------------
 // Functions
 // -----------------------------------------------------------------------------
-
-
 void destroyAllLegoBlock(void)
 {
 }
@@ -201,8 +193,7 @@ bool Setup()
 	lit.Attenuation2 = 0.0f;
 
 	float radius = 0.1f;
-	if (false == g_light.create(Device, lit, radius))
-		return false;
+	if (false == g_light.create(Device, lit, radius)) return false;
 
 	// Position and aim the camera.
 	D3DXVECTOR3 pos(0.0f, 5.0f, -8.0f);
@@ -212,8 +203,7 @@ bool Setup()
 	Device->SetTransform(D3DTS_VIEW, &g_mView);
 
 	// Set the projection matrix.
-	D3DXMatrixPerspectiveFovLH(&g_mProj, D3DX_PI / 4,
-		(float)Width / (float)Height, 1.0f, 100.0f);
+	D3DXMatrixPerspectiveFovLH(&g_mProj, D3DX_PI / 4, (float)Width / (float)Height, 1.0f, 100.0f);
 	Device->SetTransform(D3DTS_PROJECTION, &g_mProj);
 
 	// Set render states.
@@ -244,7 +234,6 @@ bool Display(float timeDelta)
 	int i = 0;
 	int j = 0;
 
-
 	if (Device)
 	{
 		Device->Clear(0, 0, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0x00afafaf, 1.0f, 0);
@@ -260,36 +249,26 @@ bool Display(float timeDelta)
 			}
 		}
 
-		for (i = 0; i < 16; i++)
-		{
-			for (j = 0; j < 16; j++)
-			{
-				if (i >= j)
-				{
+		for (i = 0; i < 16; i++) {
+			for (j = 0; j < 16; j++) {
+				if (i >= j) {
 					continue;
 				}
 				g_sphere[i]->hitBy(*g_sphere[j]);
 			}
 		}
 
-		for (i = 0; i < 6; i++)
-		{
-			for (j = 0; j < 16; j++)
-			{
+		for (i = 0; i < 6; i++) {
+			for (j = 0; j < 16; j++) {
 				if (g_hole[i].hasIntersected(*g_sphere[j]) && status.getTurnPlayer()->getBallType() == BallType::NONE &&
-					g_sphere[j]->getBallType() != BallType::EIGHT && g_sphere[j]->getBallType() != BallType::HAND)
-				{
-					// TODO : Check
+					g_sphere[j]->getBallType() != BallType::EIGHT && g_sphere[j]->getBallType() != BallType::HAND) {
 					BallType nowBallType = g_sphere[j]->getBallType();
 					status.getTurnPlayer()->setBallType(nowBallType);
 					status.getNotTurnPlayer()->setBallType((nowBallType == BallType::STRIPE) ? BallType::SOLID : BallType::STRIPE);
 				}
-
 				g_hole[i].hitBy(*g_sphere[j]);
 			}
 		}
-
-		
 
 		// draw plane, walls, and spheres
 		g_legoPlane.draw(Device, g_mWorld);
@@ -305,8 +284,7 @@ bool Display(float timeDelta)
 			
 
 		g_target_blueball.draw(Device, g_mWorld);
-		//g_light.draw(Device);
-
+		//g_light.draw(Device); // 효과는 주되, 화면상에서 가려줌
 
 		Device->EndScene();
 		Device->Present(0, 0, 0, 0);
@@ -316,21 +294,16 @@ bool Display(float timeDelta)
 	foulManager.checkFoul();
 
 	if (!turnManager.processTurn(g_sphere)) {
-
-		if (foulManager.isLose())
-		{
-			//MessageBox(nullptr, "게임이 끝남", nullptr, 0);
+		if (foulManager.isLose()) {
 			status.setWinnerPlayer(status.getNotTurnPlayer()->getPlayerId());
 		}
 
-		if (status.getGameEndStatus())
-		{
-			string msg = "Player " + std::to_string(status.getWinnerPlayer()) + " 승리!";
+		if (status.getGameEndStatus()) {
+			string msg = "Player " + std::to_string(status.getWinnerPlayer()) + " 승리";
 			MessageBox(nullptr, msg.c_str(), nullptr, 0);
 			::DestroyWindow(window);
 			return true;
 		}
-
 	}
 	return true;
 }

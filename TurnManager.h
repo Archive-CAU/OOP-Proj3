@@ -4,18 +4,19 @@
 #include "CSphere.h"
 #include <array>
 #include <vector>
-#include "Player.h"
+
 using std::vector;
 using std::array;
 
 class TurnManager
 {
 private:
-	Player* players;
 	vector<int> playerIdList; // 매니저가 관리할 플레이어들의 ID
 	int nowTurnPlayerIndex; // 현재 턴을 진행하는 플레이어의 위치
 	void resetTurn(); // 현재 턴의 상황을 초기화시킨다.
 	void finishTurn(); // 턴이 종료되었을 때 처리를 함.
+	bool isMyBallIn;
+	
 public:
 	TurnManager() = delete; // 기본 생성자를 삭제.
 	TurnManager(const vector<int>& playerIdList); // 초기 생성.
