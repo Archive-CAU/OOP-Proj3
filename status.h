@@ -15,13 +15,11 @@ class PlayerNotFoundException : public exception
 private:
 	char* exceptionMessageString;
 public:
-	PlayerNotFoundException(const char* exceptionMessage)
-	{
+	PlayerNotFoundException(const char* exceptionMessage) {
 		strcpy(this->exceptionMessageString, exceptionMessage);
 	}
 
-	virtual const char* what() const noexcept
-	{
+	virtual const char* what() const noexcept {
 		return exceptionMessageString;
 	}
 };

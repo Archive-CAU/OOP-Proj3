@@ -3,7 +3,6 @@
 #include "d3dUtility.h"
 #include "CSphere.h"
 
-
 class CHole : public CSphere
 {
 private:

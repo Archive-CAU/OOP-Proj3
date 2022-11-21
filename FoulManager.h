@@ -3,21 +3,15 @@
 
 class FoulManager
 {
-	// 규칙을 위반한 경우 true 반환
-	// 파울
-	void isHandBallInHole(); // 흰 공을 구멍에 넣었을 때,
-
-	//패배
-	bool isEightBallBadToIn(); // 자신의 공을 다 넣지 않고, 8번 공 넣음
-	bool isEightBallWithFoul(); // 8번 공을 넣으면서 파울
+	void isHandBallInHole(); 
+	bool isEightBallBadToIn(); 
+	bool isEightBallWithFoul(); 
 
 public:
 	FoulManager();
-
-	void reset(); // 파울 상태를 초기화
-
-	void checkFoul();// 파울이면 프리볼을 선언
-	bool isLose(); // 패배이면 패배라고 선언
+	void reset(); 
+	void checkFoul();
+	bool isLose(); 
 };
 
 #endif

@@ -1,8 +1,5 @@
-
 #ifndef _PLAYER_
 #define _PLAYER_
-
-
 
 enum class BallType
 {

@@ -143,7 +143,7 @@ void CSphere::ballUpdate(float timeDiff) {
 	this->pre_center_z = cord.z;
 
 	if (vx > 0.01 || vz > 0.01) {
-		const float SPIN_RATIO = 0.012;
+		const float SPIN_RATIO = 0.013;
 
 		float tX = cord.x + TIME_SCALE * timeDiff * m_velocity_x;
 		float tZ = cord.z + TIME_SCALE * timeDiff * m_velocity_z;

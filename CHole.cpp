@@ -2,8 +2,7 @@
 #include "CHole.h"
 #include <cmath>
 
-CHole::CHole() : m_radius(0.25)
-{
+CHole::CHole() : m_radius(0.25) {
 	D3DXMatrixIdentity(&m_mLocal); 
 	D3DXMatrixIdentity(&rotationMat); 
 	ZeroMemory(&m_mtrl, sizeof(m_mtrl)); 
@@ -16,13 +15,11 @@ CHole::CHole() : m_radius(0.25)
 	m_mtrl.Power = 5.0f;
 }
 
-CHole::~CHole()
-{
+CHole::~CHole() {
 }
 
 bool CHole::create(IDirect3DDevice9* pDevice) {
-	if (pDevice == nullptr)
-	{
+	if (pDevice == nullptr) {
 		return false;
 	}
 
@@ -30,8 +27,7 @@ bool CHole::create(IDirect3DDevice9* pDevice) {
 	D3DXMatrixRotationX(&rotationMat, 33);
 	setLocalTransform(m_mLocal);
 
-	if (FAILED(hr))
-	{
+	if (FAILED(hr)) {
 		return false;
 	}
 
@@ -39,8 +35,7 @@ bool CHole::create(IDirect3DDevice9* pDevice) {
 } 
 
 void CHole::destroy() {
-	if (m_pSphereMesh != nullptr)
-	{
+	if (m_pSphereMesh != nullptr) {
 		m_pSphereMesh->Release();
 		m_pSphereMesh = nullptr;
 	}
@@ -62,8 +57,7 @@ bool CHole::hasIntersected(CSphere& ball) const {
 	double zDistance = pow((this->center_z - ball.getPosition().z), 2);
 	double totalDistance = sqrt(xDistance + zDistance);
 
-	if (totalDistance < (this->getRadius()))
-	{
+	if (totalDistance < (this->getRadius())) {
 		return true;
 	}
 	
@@ -72,8 +66,7 @@ bool CHole::hasIntersected(CSphere& ball) const {
 
 
 void CHole::hitBy(CSphere& ball) {
-	if (this->hasIntersected(ball) && !ball.isDisabled())
-	{
+	if (this->hasIntersected(ball) && !ball.isDisabled()) {
 		ball.setPosition(100000, ball.getPosition().y, 100000);
 		ball.setPower(0.0f, 0.0f);
 		ball.disable();
