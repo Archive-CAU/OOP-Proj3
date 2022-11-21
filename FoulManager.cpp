@@ -38,7 +38,7 @@ void FoulManager::isHandBallInHole() {
 }
 
 
-bool FoulManager::isEightBallBadToIn() {
+bool FoulManager::isEightBallIn() {
 	if (g_sphere[8]->getDisableTurn() != -1 &&
 		status.getTurnPlayer()->getNumTakenBall() != 7)
 	{
@@ -61,5 +61,5 @@ void FoulManager::checkFoul() {
 }
 
 bool FoulManager::isLose() {
-	return (isEightBallBadToIn() || isEightBallWithFoul());
+	return (isEightBallIn() || isEightBallWithFoul());
 }
