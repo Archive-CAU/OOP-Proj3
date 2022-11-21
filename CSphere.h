@@ -44,7 +44,6 @@ public:
 	double getVelocity_X();
 	double getVelocity_Z();
 	void setPower(double vx, double vz);
-	void setCenter(float x, float y, float z);
 	float getRadius(void) const;
 	const D3DXMATRIX& getLocalTransform(void) const;
 	void setLocalTransform(const D3DXMATRIX& mLocal);

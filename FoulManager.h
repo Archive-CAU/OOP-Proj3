@@ -4,7 +4,7 @@
 class FoulManager
 {
 	void isHandBallInHole(); 
-	bool isEightBallBadToIn(); 
+	bool isEightBallIn();
 	bool isEightBallWithFoul(); 
 
 public:

@@ -46,11 +46,11 @@ void TurnManager::finishTurn() {
 void TurnManager::processTriggerOff() {
 	status.nextTurnCount();
 	status.setTurnProgressStatus(false);
-	dynamic_cast<CHandSphere&>(*g_sphere[0]).setFirstHitBallType(BallType::NONE);
+	//dynamic_cast<CHandSphere&>(*g_sphere[0]).setFirstHitBallType(BallType::NONE);
 }
 
 void TurnManager::processTriggerOn() {
-	dynamic_cast<CHandSphere&>(*g_sphere[0]).setFirstHitBallType(BallType::NONE);
+	//dynamic_cast<CHandSphere&>(*g_sphere[0]).setFirstHitBallType(BallType::NONE);
 	status.setFoulStatus(false);
 	status.setTurnProgressStatus(true);
 	status.setTurnChangeStatus(false);

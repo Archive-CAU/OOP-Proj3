@@ -171,13 +171,13 @@ bool Setup()
 	// create four balls and set the position
 	for (i = 0; i < 16; i++) {
 		if (false == g_sphere[i]->create(Device)) return false;
-		g_sphere[i]->setCenter(spherePos[i][0], (float)M_RADIUS, spherePos[i][1]);
+		g_sphere[i]->setPosition(spherePos[i][0], (float)M_RADIUS, spherePos[i][1]);
 		g_sphere[i]->setPower(0, 0);
 	}
 
 	// create blue ball for set direction
 	if (false == g_target_blueball.create(Device)) return false;
-	g_target_blueball.setCenter(.0f, (float)M_RADIUS, .0f);
+	g_target_blueball.setPosition(.0f, (float)M_RADIUS, .0f);
 
 	// light setting 
 	D3DLIGHT9 lit;
@@ -405,7 +405,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				dy = (old_y - new_y);// * 0.01f;
 
 				D3DXVECTOR3 coord3d = g_target_blueball.getPosition();
-				g_target_blueball.setCenter(coord3d.x + dx * (-0.007f), coord3d.y, coord3d.z + dy * 0.007f);
+				g_target_blueball.setPosition(coord3d.x + dx * (-0.007f), coord3d.y, coord3d.z + dy * 0.007f);
 			}
 			old_x = new_x;
 			old_y = new_y;
