@@ -93,23 +93,31 @@ bool DisplayGameStatus::update()
 	switch (status.getTurnPlayer()->getPlayerId())
 	{
 	case 1:
-		this->FontObjects[0]->DrawText(60, 20, 0xffFF00000, this->playerName[0].c_str());
+		this->FontObjects[0]->DrawText(60, 20, 0xff0000FF, this->playerName[0].c_str());
 		this->FontObjects[1]->DrawText(windowWidth - 160, 20, 0xff000000, this->playerName[1].c_str());
 		break;
 
 	case 2:
 		this->FontObjects[0]->DrawText(60, 20, 0xff000000, this->playerName[0].c_str());
-		this->FontObjects[1]->DrawText(windowWidth - 160, 20, 0xffFF0000, this->playerName[1].c_str());
+		this->FontObjects[1]->DrawText(windowWidth - 160, 20, 0xff0000FF, this->playerName[1].c_str());
 		break;
 	}
 
 	this->FontObjects[2]->DrawText(60, 50, 0xff0000000, this->playerBallCount[0].c_str());
-	this->FontObjects[3]->DrawText(windowWidth - 160, 50, 0xff0000000, this->playerBallCount[1].c_str());
+	this->FontObjects[3]->DrawText(windowWidth - 160, 50, 0xff000000, this->playerBallCount[1].c_str());
 
 	this->FontObjects[4]->DrawText(60, 80, 0xff0000000, this->playerBallType[0].c_str());
-	this->FontObjects[5]->DrawText(windowWidth - 160, 80, 0xff0000000, this->playerBallType[1].c_str());
+	this->FontObjects[5]->DrawText(windowWidth - 160, 80, 0xff000000, this->playerBallType[1].c_str());
 
-	this->FontObjects[6]->DrawText(windowWidth / 2, 10, 0xff0000000, _getTurnStatus().c_str());
+
+	if (status.getTurnProgressStatus() == true)
+	{
+		this->FontObjects[6]->DrawText(windowWidth / 2, 10, 0xff000000, _getTurnStatus().c_str());
+	}
+	else if (status.getTurnProgressStatus() == false)
+	{
+		this->FontObjects[6]->DrawText(windowWidth / 2, 10, 0xff0000FF, _getTurnStatus().c_str());
+	}
 
 	return false;
 }
