@@ -172,13 +172,6 @@ void CSphere::setPower(double vx, double vz) {
 	this->m_velocity_z = vz;
 }
 
-void CSphere::setCenter(float x, float y, float z) {
-	D3DXMATRIX m;
-	center_x = x;	center_y = y;	center_z = z;
-	D3DXMatrixTranslation(&m, x, y, z);
-	setLocalTransform(m);
-}
-
 float CSphere::getRadius(void)  const { return (float)(M_RADIUS); }
 const D3DXMATRIX& CSphere::getLocalTransform(void) const { return m_mLocal; }
 void CSphere::setLocalTransform(const D3DXMATRIX& mLocal) { m_mLocal = mLocal; }
