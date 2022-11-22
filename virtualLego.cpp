@@ -168,7 +168,7 @@ bool Setup()
 	if (false == g_legowall[3]->create(Device, -1, -1, 0.30f, 0.3f, 6.24f, d3d::DARKRED)) return false;
 	g_legowall[3]->setPosition(-4.65f, 0.12f, 0.0f);
 
-	// create four balls and set the position
+	// create sixteen balls and set the position
 	for (i = 0; i < 16; i++) {
 		if (false == g_sphere[i]->create(Device)) return false;
 		g_sphere[i]->setPosition(spherePos[i][0], (float)M_RADIUS, spherePos[i][1]);
