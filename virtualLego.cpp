@@ -368,7 +368,7 @@ LRESULT CALLBACK d3d::WndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 		float dx;
 		float dy;
 
-		if ((LOWORD(wParam) & MK_LBUTTON)) {
+		if (LOWORD(wParam) & MK_LBUTTON) {
 			
 
 			if (isReset) {
