@@ -93,8 +93,6 @@ bool TurnManager::processTurn(const array<CSphere*, 16>& fieldBalls) {
 	}
 	else {
 		bool isPutMyBall = false;
-		int myBallCount = 0;
-		int otherBallCount = 0;
 
 		for (int i = 0; i < 16; i++) {
 			if (g_sphere[i]->getDisableTurn() == status.getCurrentTurnCount()

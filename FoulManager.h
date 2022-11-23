@@ -3,7 +3,7 @@
 
 class FoulManager
 {
-	void isHandBallInHole(); 
+	void isHandBallInHole();
 	bool isEightBallIn();
 	bool isEightBallWithFoul(); 
 
